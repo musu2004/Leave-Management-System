@@ -1,5 +1,5 @@
 package com.nexturn.lms.service;
 
-public class ManagerService {
+public class LeaveScheduler {
 
 }
