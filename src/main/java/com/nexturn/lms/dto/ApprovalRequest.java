@@ -1,5 +1,7 @@
 package com.nexturn.lms.dto;
 
-public class ApprovalRequest {
+import jakarta.validation.constraints.NotNull;
 
-}
+public record ApprovalRequest(
+        @NotNull Integer managerId,
+        String comment) {}

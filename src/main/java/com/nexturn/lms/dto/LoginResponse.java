@@ -1,5 +1,3 @@
 package com.nexturn.lms.dto;
 
-public class LoginResponse {
-
-}
+public record LoginResponse(String username, String role, String token) {}
