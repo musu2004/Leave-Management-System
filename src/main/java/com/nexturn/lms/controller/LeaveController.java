@@ -11,12 +11,17 @@ import java.util.List;
 @RequestMapping("/api/leaves")
 @CrossOrigin
 public class LeaveController {
+
     private final LeaveService service;
 
-    public LeaveController(LeaveService service) { this.service = service; }
+    public LeaveController(LeaveService service) {
+        this.service = service;
+    }
 
     @PostMapping
-    public LeaveApplication apply(@Valid @RequestBody LeaveRequest request) {
+    public LeaveApplication apply(
+            @Valid @RequestBody LeaveRequest request) {
+
         return service.apply(request);
     }
 
@@ -31,8 +36,10 @@ public class LeaveController {
     }
 
     @PutMapping("/{leaveId}/cancel/{empId}")
-    public LeaveApplication cancel(@PathVariable Integer leaveId, @PathVariable Integer empId) {
+    public LeaveApplication cancel(
+            @PathVariable Integer leaveId,
+            @PathVariable Integer empId) {
+
         return service.cancel(leaveId, empId);
     }
 }
-
