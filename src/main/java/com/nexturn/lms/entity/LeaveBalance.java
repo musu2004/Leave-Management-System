@@ -3,9 +3,14 @@ package com.nexturn.lms.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "leave_balance",
-       uniqueConstraints = @UniqueConstraint(columnNames = {"emp_id", "leave_type_id", "year"}))
+@Table(
+        name = "leave_balance",
+        uniqueConstraints = @UniqueConstraint(
+                columnNames = {"emp_id", "leave_type_id", "year"}
+        )
+)
 public class LeaveBalance {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer balanceId;
@@ -28,19 +33,58 @@ public class LeaveBalance {
     @Column(nullable = false)
     private Integer year;
 
-    public LeaveBalance() {}
+    public LeaveBalance() {
+    }
 
-    public Integer getBalanceId() { return balanceId; }
-    public Integer getEmpId() { return empId; }
-    public void setEmpId(Integer empId) { this.empId = empId; }
-    public Integer getLeaveTypeId() { return leaveTypeId; }
-    public void setLeaveTypeId(Integer leaveTypeId) { this.leaveTypeId = leaveTypeId; }
-    public Integer getTotalAllocatedDays() { return totalAllocatedDays; }
-    public void setTotalAllocatedDays(Integer totalAllocatedDays) { this.totalAllocatedDays = totalAllocatedDays; }
-    public Integer getUsedDays() { return usedDays; }
-    public void setUsedDays(Integer usedDays) { this.usedDays = usedDays; }
-    public Integer getRemainingDays() { return remainingDays; }
-    public void setRemainingDays(Integer remainingDays) { this.remainingDays = remainingDays; }
-    public Integer getYear() { return year; }
-    public void setYear(Integer year) { this.year = year; }
+    public Integer getBalanceId() {
+        return balanceId;
+    }
+
+    public Integer getEmpId() {
+        return empId;
+    }
+
+    public void setEmpId(Integer empId) {
+        this.empId = empId;
+    }
+
+    public Integer getLeaveTypeId() {
+        return leaveTypeId;
+    }
+
+    public void setLeaveTypeId(Integer leaveTypeId) {
+        this.leaveTypeId = leaveTypeId;
+    }
+
+    public Integer getTotalAllocatedDays() {
+        return totalAllocatedDays;
+    }
+
+    public void setTotalAllocatedDays(Integer totalAllocatedDays) {
+        this.totalAllocatedDays = totalAllocatedDays;
+    }
+
+    public Integer getUsedDays() {
+        return usedDays;
+    }
+
+    public void setUsedDays(Integer usedDays) {
+        this.usedDays = usedDays;
+    }
+
+    public Integer getRemainingDays() {
+        return remainingDays;
+    }
+
+    public void setRemainingDays(Integer remainingDays) {
+        this.remainingDays = remainingDays;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
 }

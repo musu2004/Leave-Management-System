@@ -8,6 +8,5 @@ public record LeaveRequest(
         @NotNull Integer leaveTypeId,
         @NotNull LocalDate startDate,
         @NotNull LocalDate endDate,
-        @NotBlank @Size(max = 200) String reason) {}
-
-
+        @NotBlank @Size(max = 200) String reason) {
+}

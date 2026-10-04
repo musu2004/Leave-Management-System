@@ -7,6 +7,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "leave_application")
 public class LeaveApplication {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer leaveId;
@@ -33,21 +34,66 @@ public class LeaveApplication {
     @Column(nullable = false, length = 20)
     private LeaveStatus status = LeaveStatus.PENDING;
 
-    public LeaveApplication() {}
+    public LeaveApplication() {
+    }
 
-    public Integer getLeaveId() { return leaveId; }
-    public Integer getEmpId() { return empId; }
-    public void setEmpId(Integer empId) { this.empId = empId; }
-    public Integer getLeaveTypeId() { return leaveTypeId; }
-    public void setLeaveTypeId(Integer leaveTypeId) { this.leaveTypeId = leaveTypeId; }
-    public LocalDate getStartDate() { return startDate; }
-    public void setStartDate(LocalDate startDate) { this.startDate = startDate; }
-    public LocalDate getEndDate() { return endDate; }
-    public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
-    public Integer getNoOfDaysRequested() { return noOfDaysRequested; }
-    public void setNoOfDaysRequested(Integer noOfDaysRequested) { this.noOfDaysRequested = noOfDaysRequested; }
-    public String getReason() { return reason; }
-    public void setReason(String reason) { this.reason = reason; }
-    public LeaveStatus getStatus() { return status; }
-    public void setStatus(LeaveStatus status) { this.status = status; }
+    public Integer getLeaveId() {
+        return leaveId;
+    }
+
+    public Integer getEmpId() {
+        return empId;
+    }
+
+    public void setEmpId(Integer empId) {
+        this.empId = empId;
+    }
+
+    public Integer getLeaveTypeId() {
+        return leaveTypeId;
+    }
+
+    public void setLeaveTypeId(Integer leaveTypeId) {
+        this.leaveTypeId = leaveTypeId;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public Integer getNoOfDaysRequested() {
+        return noOfDaysRequested;
+    }
+
+    public void setNoOfDaysRequested(Integer noOfDaysRequested) {
+        this.noOfDaysRequested = noOfDaysRequested;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public LeaveStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(LeaveStatus status) {
+        this.status = status;
+    }
 }

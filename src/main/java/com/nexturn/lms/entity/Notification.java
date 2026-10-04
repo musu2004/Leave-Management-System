@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "notification")
 public class Notification {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long notificationId;
@@ -27,16 +28,46 @@ public class Notification {
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public Notification() {}
+    public Notification() {
+    }
 
-    public Long getNotificationId() { return notificationId; }
-    public Integer getEmpId() { return empId; }
-    public void setEmpId(Integer empId) { this.empId = empId; }
-    public NotificationType getType() { return type; }
-    public void setType(NotificationType type) { this.type = type; }
-    public String getMessage() { return message; }
-    public void setMessage(String message) { this.message = message; }
-    public Boolean getReadFlag() { return readFlag; }
-    public void setReadFlag(Boolean readFlag) { this.readFlag = readFlag; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    public Long getNotificationId() {
+        return notificationId;
+    }
+
+    public Integer getEmpId() {
+        return empId;
+    }
+
+    public void setEmpId(Integer empId) {
+        this.empId = empId;
+    }
+
+    public NotificationType getType() {
+        return type;
+    }
+
+    public void setType(NotificationType type) {
+        this.type = type;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Boolean getReadFlag() {
+        return readFlag;
+    }
+
+    public void setReadFlag(Boolean readFlag) {
+        this.readFlag = readFlag;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 }

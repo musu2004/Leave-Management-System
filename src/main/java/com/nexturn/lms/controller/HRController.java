@@ -2,9 +2,7 @@ package com.nexturn.lms.controller;
 
 import com.nexturn.lms.entity.*;
 import com.nexturn.lms.service.*;
-
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -29,10 +27,6 @@ public class HRController {
         this.leaveBalanceService = leaveBalanceService;
     }
 
-    // =========================
-    // LEAVE TYPE
-    // =========================
-
     @GetMapping("/leave-types")
     public List<LeaveType> leaveTypes() {
         return leaveTypeService.getAll();
@@ -42,10 +36,6 @@ public class HRController {
     public LeaveType createLeaveType(@RequestBody LeaveType type) {
         return leaveTypeService.save(type);
     }
-
-    // =========================
-    // HOLIDAY
-    // =========================
 
     @GetMapping("/holidays")
     public List<Holiday> holidays() {
@@ -57,18 +47,10 @@ public class HRController {
         return holidayService.save(holiday);
     }
 
-    // =========================
-    // EMPLOYEES
-    // =========================
-
     @GetMapping("/employees")
     public List<Employee> employees() {
         return employeeService.getAll();
     }
-
-    // =========================
-    // LEAVE BALANCE / ALLOCATION
-    // =========================
 
     @PostMapping("/leave-balances")
     public LeaveBalance allocateLeave(
@@ -79,8 +61,7 @@ public class HRController {
         return leaveBalanceService.initialize(
                 empId,
                 leaveTypeId,
-                year
-        );
+                year);
     }
 
     @GetMapping("/leave-balances/{empId}/{leaveTypeId}/{year}")
@@ -92,7 +73,6 @@ public class HRController {
         return leaveBalanceService.get(
                 empId,
                 leaveTypeId,
-                year
-        );
+                year);
     }
-}	
+}

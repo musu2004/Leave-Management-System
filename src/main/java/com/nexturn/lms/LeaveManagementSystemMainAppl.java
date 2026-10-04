@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 public class LeaveManagementSystemMainAppl {
+
     public static void main(String[] args) {
         SpringApplication.run(LeaveManagementSystemMainAppl.class, args);
     }
