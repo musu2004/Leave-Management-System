@@ -7,18 +7,22 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(ResourceNotFoundException.class)
     ResponseEntity<?> notFound(ResourceNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", ex.getMessage()));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("message", ex.getMessage()));
     }
 
     @ExceptionHandler(BusinessException.class)
     ResponseEntity<?> business(BusinessException ex) {
-        return ResponseEntity.badRequest().body(Map.of("message", ex.getMessage()));
+        return ResponseEntity.badRequest()
+                .body(Map.of("message", ex.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<?> validation(MethodArgumentNotValidException ex) {
-        return ResponseEntity.badRequest().body(Map.of("message", "Invalid request data"));
+        return ResponseEntity.badRequest()
+                .body(Map.of("message", "Invalid request data"));
     }
 }

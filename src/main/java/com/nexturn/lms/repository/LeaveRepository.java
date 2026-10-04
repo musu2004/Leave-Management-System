@@ -7,6 +7,8 @@ import java.util.List;
 public interface LeaveRepository extends JpaRepository<LeaveApplication, Integer> {
 
     List<LeaveApplication> findByEmpId(Integer empId);
-    List<LeaveApplication> findByEmpIdAndStatus(Integer empId, com.nexturn.lms.enums.LeaveStatus status);
 
+    List<LeaveApplication> findByEmpIdAndStatus(
+            Integer empId,
+            com.nexturn.lms.enums.LeaveStatus status);
 }

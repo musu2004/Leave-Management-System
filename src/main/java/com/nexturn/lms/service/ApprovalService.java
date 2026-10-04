@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ApprovalService {
+
     private final ApprovalRepository approvalRepository;
     private final EmployeeRepository employeeRepository;
     private final LeaveService leaveService;
@@ -21,12 +22,14 @@ public class ApprovalService {
     private final AuditLogService auditLogService;
     private final NotificationService notificationService;
 
-    public ApprovalService(ApprovalRepository approvalRepository,
-                           EmployeeRepository employeeRepository,
-                           LeaveService leaveService,
-                           LeaveBalanceService balanceService,
-                           AuditLogService auditLogService,
-                           NotificationService notificationService) {
+    public ApprovalService(
+            ApprovalRepository approvalRepository,
+            EmployeeRepository employeeRepository,
+            LeaveService leaveService,
+            LeaveBalanceService balanceService,
+            AuditLogService auditLogService,
+            NotificationService notificationService) {
+
         this.approvalRepository = approvalRepository;
         this.employeeRepository = employeeRepository;
         this.leaveService = leaveService;
@@ -36,21 +39,34 @@ public class ApprovalService {
     }
 
     @Transactional
-    public LeaveApplication decide(Integer leaveId, ApprovalRequest request, boolean approve) {
+    public LeaveApplication decide(
+            Integer leaveId,
+            ApprovalRequest request,
+            boolean approve) {
+
         LeaveApplication leave = leaveService.getById(leaveId);
 
         if (leave.getStatus() != LeaveStatus.PENDING) {
-            throw new BusinessException("Only pending requests can be approved or rejected");
+            throw new BusinessException(
+                    "Only pending requests can be approved or rejected");
         }
 
-        Employee employee = employeeRepository.findById(leave.getEmpId())
-                .orElseThrow(() -> new BusinessException("Employee not found"));
+        Employee employee = employeeRepository
+                .findById(leave.getEmpId())
+                .orElseThrow(() -> new BusinessException(
+                        "Employee not found"));
 
-        if (employee.getManagerId() == null || !employee.getManagerId().equals(request.managerId())) {
-            throw new BusinessException("Manager is not assigned to this employee");
+        if (employee.getManagerId() == null
+                || !employee.getManagerId().equals(request.managerId())) {
+
+            throw new BusinessException(
+                    "Manager is not assigned to this employee");
         }
 
-        LeaveStatus decision = approve ? LeaveStatus.APPROVED : LeaveStatus.REJECTED;
+        LeaveStatus decision = approve
+                ? LeaveStatus.APPROVED
+                : LeaveStatus.REJECTED;
+
         leave.setStatus(decision);
 
         Approval approval = new Approval();
@@ -58,21 +74,35 @@ public class ApprovalService {
         approval.setManagerId(request.managerId());
         approval.setDecision(decision);
         approval.setComment(request.comment());
+
         approvalRepository.save(approval);
 
         if (approve) {
-            balanceService.addUsedDays(leave.getEmpId(), leave.getLeaveTypeId(),
-                    leave.getStartDate().getYear(), leave.getNoOfDaysRequested());
+            balanceService.addUsedDays(
+                    leave.getEmpId(),
+                    leave.getLeaveTypeId(),
+                    leave.getStartDate().getYear(),
+                    leave.getNoOfDaysRequested());
         }
 
         LeaveApplication saved = leaveService.getById(leaveId);
-        auditLogService.log(leave.getEmpId(), leaveId, decision.name(),
-                request.comment() == null ? "Manager decision recorded" : request.comment());
-        notificationService.create(leave.getEmpId(),
-                approve ? NotificationType.LEAVE_APPROVED : NotificationType.LEAVE_REJECTED,
-                "Your leave request was " + decision.name().toLowerCase());
 
-        // Persist status after all business checks.
+        auditLogService.log(
+                leave.getEmpId(),
+                leaveId,
+                decision.name(),
+                request.comment() == null
+                        ? "Manager decision recorded"
+                        : request.comment());
+
+        notificationService.create(
+                leave.getEmpId(),
+                approve
+                        ? NotificationType.LEAVE_APPROVED
+                        : NotificationType.LEAVE_REJECTED,
+                "Your leave request was "
+                        + decision.name().toLowerCase());
+
         return saveStatus(saved);
     }
 

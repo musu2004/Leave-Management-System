@@ -7,12 +7,20 @@ import java.util.List;
 
 @Service
 public class AuditLogService {
+
     private final AuditLogRepository repository;
+    public AuditLogService(AuditLogRepository repository) {
+        this.repository = repository;
+    }
 
-    public AuditLogService(AuditLogRepository repository) { this.repository = repository; }
+    public AuditLog log(
+            Integer empId,
+            Integer leaveId,
+            String action,
+            String details) {
 
-    public AuditLog log(Integer empId, Integer leaveId, String action, String details) {
-        return repository.save(new AuditLog(empId, leaveId, action, details));
+        return repository.save(
+                new AuditLog(empId, leaveId, action, details));
     }
 
     public List<AuditLog> getByEmployee(Integer empId) {

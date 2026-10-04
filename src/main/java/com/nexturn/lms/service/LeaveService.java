@@ -18,6 +18,7 @@ import java.util.List;
 
 @Service
 public class LeaveService {
+
     private final LeaveRepository leaveRepository;
     private final LeaveTypeRepository leaveTypeRepository;
     private final LeaveBalanceService balanceService;
@@ -25,12 +26,14 @@ public class LeaveService {
     private final AuditLogService auditLogService;
     private final NotificationService notificationService;
 
-    public LeaveService(LeaveRepository leaveRepository,
-                        LeaveTypeRepository leaveTypeRepository,
-                        LeaveBalanceService balanceService,
-                        HolidayService holidayService,
-                        AuditLogService auditLogService,
-                        NotificationService notificationService) {
+    public LeaveService(
+            LeaveRepository leaveRepository,
+            LeaveTypeRepository leaveTypeRepository,
+            LeaveBalanceService balanceService,
+            HolidayService holidayService,
+            AuditLogService auditLogService,
+            NotificationService notificationService) {
+
         this.leaveRepository = leaveRepository;
         this.leaveTypeRepository = leaveTypeRepository;
         this.balanceService = balanceService;
@@ -42,19 +45,31 @@ public class LeaveService {
     @Transactional
     public LeaveApplication apply(LeaveRequest request) {
         if (request.endDate().isBefore(request.startDate())) {
-            throw new BusinessException("End date cannot be before start date");
+            throw new BusinessException(
+                    "End date cannot be before start date");
         }
 
-        LeaveType type = leaveTypeRepository.findById(request.leaveTypeId())
-                .orElseThrow(() -> new ResourceNotFoundException("Leave type not found"));
+        LeaveType type = leaveTypeRepository
+                .findById(request.leaveTypeId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Leave type not found"));
 
-        int days = workingDays(request.startDate(), request.endDate());
-        if (days <= 0) throw new BusinessException("No working days selected");
+        int days = workingDays(
+                request.startDate(),
+                request.endDate());
 
-        LeaveBalance balance = balanceService.get(request.empId(), request.leaveTypeId(),
+        if (days <= 0) {
+            throw new BusinessException("No working days selected");
+        }
+
+        LeaveBalance balance = balanceService.get(
+                request.empId(),
+                request.leaveTypeId(),
                 request.startDate().getYear());
 
-        if (!type.getAllowNegativeBalance() && balance.getRemainingDays() < days) {
+        if (!type.getAllowNegativeBalance()
+                && balance.getRemainingDays() < days) {
+
             throw new BusinessException("Insufficient leave balance");
         }
 
@@ -68,9 +83,18 @@ public class LeaveService {
         application.setStatus(LeaveStatus.PENDING);
 
         LeaveApplication saved = leaveRepository.save(application);
-        auditLogService.log(request.empId(), saved.getLeaveId(), "PENDING", "Leave application submitted");
-        notificationService.create(request.empId(), NotificationType.LEAVE_SUBMITTED,
+
+        auditLogService.log(
+                request.empId(),
+                saved.getLeaveId(),
+                "PENDING",
+                "Leave application submitted");
+
+        notificationService.create(
+                request.empId(),
+                NotificationType.LEAVE_SUBMITTED,
                 "Leave request submitted successfully");
+
         return saved;
     }
 
@@ -79,31 +103,62 @@ public class LeaveService {
     }
 
     @Transactional
-    public LeaveApplication cancel(Integer leaveId, Integer empId) {
+    public LeaveApplication cancel(
+            Integer leaveId,
+            Integer empId) {
+
         LeaveApplication leave = getById(leaveId);
-        if (!leave.getEmpId().equals(empId)) throw new BusinessException("You cannot cancel this leave");
-        if (leave.getStatus() != LeaveStatus.PENDING) throw new BusinessException("Only pending leave can be cancelled");
+
+        if (!leave.getEmpId().equals(empId)) {
+            throw new BusinessException("You cannot cancel this leave");
+        }
+
+        if (leave.getStatus() != LeaveStatus.PENDING) {
+            throw new BusinessException(
+                    "Only pending leave can be cancelled");
+        }
 
         leave.setStatus(LeaveStatus.CANCELLED);
+
         LeaveApplication saved = leaveRepository.save(leave);
-        auditLogService.log(empId, leaveId, "CANCELLED", "Pending leave cancelled");
-        notificationService.create(empId, NotificationType.LEAVE_CANCELLED, "Leave request cancelled");
+
+        auditLogService.log(
+                empId,
+                leaveId,
+                "CANCELLED",
+                "Pending leave cancelled");
+
+        notificationService.create(
+                empId,
+                NotificationType.LEAVE_CANCELLED,
+                "Leave request cancelled");
+
         return saved;
     }
 
     public LeaveApplication getById(Integer id) {
         return leaveRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Leave application not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Leave application not found"));
     }
 
     private int workingDays(LocalDate start, LocalDate end) {
         int count = 0;
-        for (LocalDate d = start; !d.isAfter(end); d = d.plusDays(1)) {
+
+        for (LocalDate d = start;
+             !d.isAfter(end);
+             d = d.plusDays(1)) {
+
             DayOfWeek day = d.getDayOfWeek();
-            if (day != DayOfWeek.SATURDAY && day != DayOfWeek.SUNDAY && !holidayService.isHoliday(d)) {
+
+            if (day != DayOfWeek.SATURDAY
+                    && day != DayOfWeek.SUNDAY
+                    && !holidayService.isHoliday(d)) {
+
                 count++;
             }
         }
+
         return count;
     }
 }

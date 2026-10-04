@@ -8,15 +8,23 @@ import java.util.List;
 
 @Service
 public class NotificationService {
+
     private final NotificationRepository repository;
 
-    public NotificationService(NotificationRepository repository) { this.repository = repository; }
+    public NotificationService(NotificationRepository repository) {
+        this.repository = repository;
+    }
 
-    public Notification create(Integer empId, NotificationType type, String message) {
+    public Notification create(
+            Integer empId,
+            NotificationType type,
+            String message) {
+
         Notification n = new Notification();
         n.setEmpId(empId);
         n.setType(type);
         n.setMessage(message);
+
         return repository.save(n);
     }
 

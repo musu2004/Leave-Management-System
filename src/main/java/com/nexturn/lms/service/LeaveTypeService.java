@@ -8,16 +8,24 @@ import java.util.List;
 
 @Service
 public class LeaveTypeService {
+
     private final LeaveTypeRepository repository;
 
-    public LeaveTypeService(LeaveTypeRepository repository) { this.repository = repository; }
+    public LeaveTypeService(LeaveTypeRepository repository) {
+        this.repository = repository;
+    }
 
-    public List<LeaveType> getAll() { return repository.findAll(); }
-    public LeaveType save(LeaveType leaveType) { return repository.save(leaveType); }
+    public List<LeaveType> getAll() {
+        return repository.findAll();
+    }
+
+    public LeaveType save(LeaveType leaveType) {
+        return repository.save(leaveType);
+    }
+
     public LeaveType getById(Integer id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Leave type not found"));
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Leave type not found"));
     }
 }
-
-
-

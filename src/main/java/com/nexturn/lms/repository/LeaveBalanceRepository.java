@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface LeaveBalanceRepository extends JpaRepository<LeaveBalance, Integer> {
 
-    Optional<LeaveBalance> findByEmpIdAndLeaveTypeIdAndYear(Integer empId, Integer leaveTypeId, Integer year);
-
+    Optional<LeaveBalance> findByEmpIdAndLeaveTypeIdAndYear(
+            Integer empId,
+            Integer leaveTypeId,
+            Integer year);
 }

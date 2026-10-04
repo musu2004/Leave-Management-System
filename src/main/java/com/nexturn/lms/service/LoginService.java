@@ -1,39 +1,51 @@
 package com.nexturn.lms.service;
 
-import com.nexturn.lms.dto.*;
+import com.nexturn.lms.dto.LoginRequest;
+import com.nexturn.lms.dto.LoginResponse;
 import com.nexturn.lms.entity.Login;
 import com.nexturn.lms.exception.ResourceNotFoundException;
 import com.nexturn.lms.repository.LoginRepository;
-import com.nexturn.lms.security.JwtService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LoginService {
-    private final LoginRepository repository;
-    private final PasswordEncoder encoder;
-    private final JwtService jwtService;
 
-    public LoginService(LoginRepository repository, PasswordEncoder encoder, JwtService jwtService) {
+    private final LoginRepository repository;
+
+    public LoginService(LoginRepository repository) {
         this.repository = repository;
-        this.encoder = encoder;
-        this.jwtService = jwtService;
     }
 
     public LoginResponse login(LoginRequest request) {
         Login user = repository.findByUsername(request.username())
-                .orElseThrow(() -> new ResourceNotFoundException("Invalid username or password"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Invalid username or password"));
 
-        if (!encoder.matches(request.password(), user.getPassword())) {
-            throw new ResourceNotFoundException("Invalid username or password");
+        boolean passwordMatches;
+
+        try {
+            passwordMatches = BCrypt.checkpw(
+                    request.password(),
+                    user.getPassword());
+        } catch (IllegalArgumentException ex) {
+            passwordMatches = false;
         }
 
-        String token = jwtService.generateToken(user.getUsername(), user.getRole().name());
-        return new LoginResponse(user.getUsername(), user.getRole().name(), token);
+        if (!passwordMatches) {
+            throw new ResourceNotFoundException(
+                    "Invalid username or password");
+        }
+
+        return new LoginResponse(
+                user.getUsername(),
+                user.getRole().name());
     }
 
     public Login addUser(Login login) {
-        login.setPassword(encoder.encode(login.getPassword()));
+        login.setPassword(
+                BCrypt.hashpw(login.getPassword(), BCrypt.gensalt(10)));
+
         return repository.save(login);
     }
 }
