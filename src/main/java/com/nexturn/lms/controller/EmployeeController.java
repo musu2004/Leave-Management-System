@@ -33,7 +33,12 @@ public class EmployeeController {
     public List<Employee> getAll() {
         return service.getAll();
     }
-
+    
+    @GetMapping("/managers")
+    public List<Employee> managers() {
+        return service.getManagers();
+    }
+    
     @GetMapping("/{id}")
     public Employee get(@PathVariable Integer id) {
         return service.getById(id);
