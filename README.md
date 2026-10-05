@@ -1,4 +1,4 @@
-LeaveHub: Leave Management System
+#LeaveHub: Leave Management System
 
 A leave management system for a company with employees, reporting managers and HR. Employees apply for leave, the manager they report to approves or rejects it, and HR owns the rules: leave types, holidays and yearly balances. Every status change leaves a notification and an audit entry behind.
 
