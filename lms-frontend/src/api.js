@@ -1,5 +1,5 @@
-// All backend calls live here. Base URL comes from .env (VITE_API_URL).
-const BASE = import.meta.env.VITE_API_URL || "http://localhost:8080";
+// All backend calls live here. Base URL comes from .env (REACT_APP_API_URL).
+const BASE = process.env.REACT_APP_API_URL || "http://localhost:8080";
 
 async function request(path, options = {}) {
   let res;
